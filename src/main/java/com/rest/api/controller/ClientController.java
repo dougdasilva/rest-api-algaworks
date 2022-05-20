@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rest.api.domain.model.Client;
 import com.rest.api.domain.repository.ClientRepository;
+import com.rest.api.domain.service.CatalogClientService;
 
 import lombok.AllArgsConstructor;
 
@@ -28,6 +29,7 @@ public class ClientController {
 	
 
 	private ClientRepository clientRepository;
+	private CatalogClientService catalogClientService;
 	
 	@GetMapping
 	public List<Client> getAll() {
@@ -44,7 +46,7 @@ public class ClientController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Client create(@Valid @RequestBody Client client) {
-		return clientRepository.save(client);
+		return catalogClientService.save(client);
 	}
 	
 	@PutMapping("/{id}")
@@ -55,7 +57,7 @@ public class ClientController {
 		}
 		
 		client.setId(id);
-		client = clientRepository.save(client);
+		client = catalogClientService.save(client);
 		
 		return ResponseEntity.ok(client);
 	}
@@ -66,7 +68,7 @@ public class ClientController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		clientRepository.deleteById(id);
+		catalogClientService.delete(id);
 		
 		return ResponseEntity.noContent().build();
 	}
